@@ -85,22 +85,16 @@ class Motorista:
         mensagem = "list_drivers"
         self.cliente.sendto(mensagem.encode(), self.servidor)
 
-    def encerrar_conta(self):
-        mensagem = "06;" + self.id_conta + ";" + self.id_cliente
-        self.cliente.sendto(mensagem.encode())
-        data = self.cliente.recvfrom(1024).decode()
+    def deletar_conta(self):
+        mensagem = "0;delete_driver;" + self.id_cliente
+        self.cliente.sendto(mensagem.encode(), self.servidor)
+        data, addr = self.cliente.recvfrom(1024).decode()
         data = data.split(';')
         if (data[0] == '200'):
             print(data[1])
             self.conta_acessada = False
-        elif (data[0] == '202'):
-            print(data[1])
         else:
-            print("> Algum erro aconteceu.")
-
-    def formatar_msg(flag, PORTA_DESTINATARIO):
-        pass
-
+            print(data[0])
     
     def iniciar(self):
 
@@ -136,7 +130,7 @@ class Motorista:
                 print("[1] Criar Pedido")
                 print("[2] Atualizar Pedido")
                 print("[3] Listar Pedidos")
-                print("[4] Encerrar Conta")
+                print("[4] Deletar Conta")
                 print("[0] Finalizar Conexão")
                 resposta = int(input("> "))
 

@@ -139,6 +139,34 @@ class Servidor:
                         else:
                             print("> Ocorreu algum erro ao criar o motorista.")
 
+                if "delete_driver" in data.decode():
+                    # "0;create_driver;NOME;EMAIL;SENHA;CPF"
+                    msg = data.decode().split(';')
+                    autorizacao = msg[0]
+                    cliente = msg[2]
+                    if autorizacao == '0':
+                        if self.requisicao_tempo():
+                            conteudo = msg[2]
+                            self.enviar_processo('delete_driver', conteudo=conteudo)
+
+                            retorno = self.banco.deletar_conta(cliente)
+                            
+                            if retorno[0] == 200:
+                                mensagem = '200;> Motorista Deletado com Sucesso!'
+                                self.servidor.sendto(mensagem.encode(), addr)
+                                self.tempo += 1
+                            else:
+                                self.servidor.sendto("> Ocorreu algum erro ao criar o motorista.".encode(), addr)
+
+                    else:
+                        retorno = self.banco.deletar_conta(cliente)
+                        
+                        if retorno[0] == 200:
+                            print(f"> Motorista Deletado com Sucesso!   ({self.PORTA})")
+                            self.tempo += 1
+                        else:
+                            print("> Ocorreu algum erro ao deletar o motorista.")
+
                 if "access_driver" in data.decode():
                     # "0;access_driver;EMAIL;SENHA"
                     msg = data.decode().split(';')

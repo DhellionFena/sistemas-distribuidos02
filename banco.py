@@ -89,7 +89,7 @@ class Banco:
         except:
             return (400, 'erro')
 
-    def encerrar_conta(self, id):
+    def deletar_conta(self, id):
         self.banco = sqlite3.connect('banco.db')
         self.banco.execute("DELETE FROM motoristas WHERE ID=?", (id,))
         mensagem = "> Motorista encerrado com sucesso!"
