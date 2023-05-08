@@ -3,7 +3,7 @@ import os
 
 class Motorista:
 
-    def __init__(self, HOST, PORT, servidor):
+    def __init__(self, HOST, PORT):
         self.cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.servidor = ('localhost', 6969)
         self.HOST = HOST
@@ -154,5 +154,5 @@ class Motorista:
                     os.system("pause")
 
 if __name__ == '__main__':
-    motorista = Motorista('localhost', 7080, 6969)
+    motorista = Motorista('localhost', 7080)
     motorista.iniciar()
