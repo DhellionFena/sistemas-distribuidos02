@@ -22,8 +22,6 @@ class Servidor:
         self.lista_de_servidores = lista_de_servidores
 
     def iniciar(self):
-        #TODO: IMPLEMENTAR BANCO DE DADOS
-
         self.running = True
 
         while self.ativo:
@@ -105,8 +103,6 @@ class Servidor:
                         retorno += f"> PEDIDO: {item[2]}  | STATUS: {retornar_status_pedido(item[3])} | ID = ({item[0]})\n"
                     self.servidor.sendto(retorno.encode(), addr)
                     self.tempo += 1
-                    
-
 
                 if "list_drivers" in data.decode():
                     lista = self.banco.listar_motoristas()
@@ -226,20 +222,22 @@ class Servidor:
             msg = '1;' + flag + ";" + conteudo
             self.servidor.sendto(msg.encode(), ('localhost', servidor))
 
-
 def iniciar_servidor( host, porta, banco, lista_de_servidores):
     servidor = Servidor(host, porta, banco, lista_de_servidores)
     servidor.iniciar()
 
 if __name__ == '__main__':
     # Criar duas threads para cada servidor HTTP
-    servidor1_thread = threading.Thread(target=iniciar_servidor, args=('localhost', 6969, 'banco1', [6970]))
-    servidor2_thread = threading.Thread(target=iniciar_servidor, args=('localhost', 6970, 'banco2', [6969]))
+    servidor1_thread = threading.Thread(target=iniciar_servidor, args=('localhost', 7069, 'banco1', [7070, 7079]))
+    servidor2_thread = threading.Thread(target=iniciar_servidor, args=('localhost', 7070, 'banco2', [7069, 7079]))
+    servidor3_thread = threading.Thread(target=iniciar_servidor, args=('localhost', 7079, 'banco3', [7069, 7070]))
 
     # Iniciar as threads
     servidor1_thread.start()
     servidor2_thread.start()
+    servidor3_thread.start()
 
     # Esperar que as threads terminem
     servidor1_thread.join()
     servidor2_thread.join()
+    servidor3_thread.join()

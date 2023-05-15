@@ -1,17 +1,20 @@
 import socket
 import os
+import sys
 
 class Motorista:
 
-    def __init__(self, HOST, PORT):
+    def __init__(self, HOST, PORT, servidor=('localhost', 7070)):
         self.cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.servidor = ('localhost', 6969)
+        self.servidor = servidor
         self.HOST = HOST
         self.PORT = PORT
         self.cliente.bind((self.HOST, self.PORT))
 
 
         self.conta_acessada = False
+        self.id_cliente = 0
+        self.nome = ''
     
     def testar_conexao(self):
         mensagem = "teste".encode()
@@ -42,8 +45,7 @@ class Motorista:
         self.cliente.sendto(mensagem.encode(), self.servidor)
         data, addr = self.cliente.recvfrom(1024)
         data = data.decode()
-        print(data)
-        
+        print(data)      
 
     def atualizar_pedido(self):
         self.listar_pedidos()
@@ -153,6 +155,9 @@ class Motorista:
                     print("> Opção Inválida!")
                     os.system("pause")
 
+
+# python motorista.py PORT SERVIDOR
+# python motorista.py 7575 7070
 if __name__ == '__main__':
-    motorista = Motorista('localhost', 7080)
+    motorista = Motorista(HOST='localhost', PORT=int(sys.argv[1]), servidor=('localhost',int(sys.argv[2])))
     motorista.iniciar()
